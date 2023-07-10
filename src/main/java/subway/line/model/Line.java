@@ -61,10 +61,10 @@ public class Line {
     }
 
     public List<Station> getStationsInSections() {
-        List<Station> stations = new ArrayList<>();
-        stations.add(this.upStation);
-        stations.addAll(lineSection.getDownStations());
-        return stations;
+//        List<Station> stations = new ArrayList<>();
+//        stations.add(this.upStation);
+//        stations.addAll(lineSection.getDownStations());
+        return lineSection.getDownStations();
     }
 
     public void deleteSectionByStation(Station station) {

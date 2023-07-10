@@ -10,6 +10,8 @@ import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Embeddable
 @NoArgsConstructor
@@ -30,11 +32,7 @@ public class LineSection {
     }
 
     public List<Station> getDownStations() {
-        List<Station> stations = new ArrayList<>();
-        for (Section section : this.sections) {
-            stations.add(section.getDownStation());
-        }
-        return stations;
+        return this.sections.stream().flatMap(section -> Stream.of(section.getUpStation(), section.getDownStation())).collect(Collectors.toList());
     }
 
     public int getStationsCount() {
