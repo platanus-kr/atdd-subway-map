@@ -2,7 +2,7 @@ package subway.line.model;
 
 import lombok.NoArgsConstructor;
 import subway.exception.SubwayBadRequestException;
-import subway.line.constant.LineMessage;
+import subway.line.constant.SubwayMessage;
 import subway.station.model.Station;
 
 import javax.persistence.CascadeType;
@@ -40,7 +40,7 @@ public class LineSections {
     }
 
     public Section deleteSectionByStation(Station targetStation) {
-        vaildStationsCountIsOverMinimalSectionSize();
+        validStationsCountIsOverMinimalSectionSize();
         validRemoveStationIsDownStationInExistLine(targetStation);
 
         Section lastSection = getLastSection();
@@ -59,8 +59,7 @@ public class LineSections {
 
     private void validUpStationInNewSectionIsDownStationInExistLine(Section section, Line line) {
         if (!line.getDownStation().equals(section.getUpStation())) {
-            throw new SubwayBadRequestException(LineMessage.DOWN_STATION_NOT_MATCH_WITH_UP_STATION.getCode(),
-                    LineMessage.DOWN_STATION_NOT_MATCH_WITH_UP_STATION.getMessage());
+            throw new SubwayBadRequestException(SubwayMessage.DOWN_STATION_NOT_MATCH_WITH_UP_STATION);
         }
     }
 
@@ -70,22 +69,20 @@ public class LineSections {
                 .filter(s -> s.equals(section.getDownStation()))
                 .findAny()
                 .ifPresent(e -> {
-                    throw new SubwayBadRequestException(LineMessage.ADD_SECTION_STATION_DUPLICATION_VALID_MESSAGE.getCode(),
-                            LineMessage.ADD_SECTION_STATION_DUPLICATION_VALID_MESSAGE.getMessage());
+                    throw new SubwayBadRequestException(SubwayMessage.ADD_SECTION_STATION_DUPLICATION_VALID_MESSAGE);
                 });
     }
 
-    private void vaildStationsCountIsOverMinimalSectionSize() {
+    private void validStationsCountIsOverMinimalSectionSize() {
         if (this.getStationsCount() < MINIMAL_SECTION_SIZE) {
-            throw new SubwayBadRequestException(LineMessage.DOWN_STATION_MINIMAL_VALID_MESSAGE.getCode(),
-                    LineMessage.DOWN_STATION_MINIMAL_VALID_MESSAGE.getFormatMessage(MINIMAL_SECTION_SIZE));
+            throw new SubwayBadRequestException(SubwayMessage.DOWN_STATION_MINIMAL_VALID_MESSAGE.getCode(),
+                    SubwayMessage.DOWN_STATION_MINIMAL_VALID_MESSAGE.getFormatMessage(MINIMAL_SECTION_SIZE));
         }
     }
 
     private void validRemoveStationIsDownStationInExistLine(Station targetStation, Station downStation) {
         if (!downStation.equals(targetStation)) {
-            throw new SubwayBadRequestException(LineMessage.SECTION_DELETE_LAST_STATION_VALID_MESSAGE.getCode(),
-                    LineMessage.SECTION_DELETE_LAST_STATION_VALID_MESSAGE.getMessage());
+            throw new SubwayBadRequestException(SubwayMessage.SECTION_DELETE_LAST_STATION_VALID_MESSAGE);
         }
     }
 
@@ -93,8 +90,7 @@ public class LineSections {
         Section lastSection = getLastSection();
         Station downStation = lastSection.getDownStation();
         if (!downStation.equals(targetStation)) {
-            throw new SubwayBadRequestException(LineMessage.SECTION_DELETE_LAST_STATION_VALID_MESSAGE.getCode(),
-                    LineMessage.SECTION_DELETE_LAST_STATION_VALID_MESSAGE.getMessage());
+            throw new SubwayBadRequestException(SubwayMessage.SECTION_DELETE_LAST_STATION_VALID_MESSAGE);
         }
     }
 

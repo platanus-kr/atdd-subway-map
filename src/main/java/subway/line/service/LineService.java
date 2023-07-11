@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import subway.exception.SubwayNotFoundException;
-import subway.line.constant.LineMessage;
+import subway.line.constant.SubwayMessage;
 import subway.line.dto.LineCreateRequest;
 import subway.line.dto.LineModifyRequest;
 import subway.line.dto.LineResponse;
@@ -13,7 +13,6 @@ import subway.line.repository.LineRepository;
 import subway.station.model.Station;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -53,21 +52,18 @@ public class LineService {
     public LineResponse findLineResponseById(Long id) {
         return lineRepository.findById(id)
                 .map(LineResponse::from)
-                .orElseThrow(() -> new SubwayNotFoundException(LineMessage.NOT_FOUND_MESSAGE.getCode(),
-                        LineMessage.NOT_FOUND_MESSAGE.getMessage()));
+                .orElseThrow(() -> new SubwayNotFoundException(SubwayMessage.LINE_NOT_FOUND_MESSAGE));
     }
 
     public Line findLineById(Long id) {
         return lineRepository.findById(id)
-                .orElseThrow(() -> new SubwayNotFoundException(LineMessage.NOT_FOUND_MESSAGE.getCode(),
-                        LineMessage.NOT_FOUND_MESSAGE.getMessage()));
+                .orElseThrow(() -> new SubwayNotFoundException(SubwayMessage.LINE_NOT_FOUND_MESSAGE));
     }
 
     @Transactional
     public void deleteLineById(Long id) {
         lineRepository.findById(id)
-                .orElseThrow(() -> new SubwayNotFoundException(LineMessage.NOT_FOUND_MESSAGE.getCode(),
-                        LineMessage.NOT_FOUND_MESSAGE.getMessage()));
+                .orElseThrow(() -> new SubwayNotFoundException(SubwayMessage.LINE_NOT_FOUND_MESSAGE));
         lineRepository.deleteById(id);
     }
 }

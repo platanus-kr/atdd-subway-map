@@ -3,8 +3,6 @@ package subway.line.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import subway.exception.SubwayBadRequestException;
-import subway.line.constant.LineMessage;
 import subway.line.dto.LineCreateRequest;
 import subway.line.dto.LineResponse;
 import subway.line.dto.SectionCreateRequest;
@@ -13,8 +11,6 @@ import subway.line.model.Line;
 import subway.line.model.Section;
 import subway.station.model.Station;
 import subway.station.service.StationService;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
