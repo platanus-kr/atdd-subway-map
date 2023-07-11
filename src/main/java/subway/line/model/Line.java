@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import subway.exception.SubwayBadRequestException;
-import subway.line.constant.LineMessage;
 import subway.station.model.Station;
 
 import javax.persistence.Column;
@@ -16,7 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -48,7 +45,7 @@ public class Line {
 
     @Builder.Default
     @Embedded
-    private LineSection lineSection = new LineSection();
+    private LineSections lineSections = new LineSections();
 
     public void updateLine(String name, String color) {
         this.name = name;
@@ -56,19 +53,16 @@ public class Line {
     }
 
     public void addSection(Section section) {
-        this.lineSection.add(section, this);
+        this.lineSections.add(section, this);
         this.downStation = section.getDownStation();
     }
 
     public List<Station> getStationsInSections() {
-//        List<Station> stations = new ArrayList<>();
-//        stations.add(this.upStation);
-//        stations.addAll(lineSection.getDownStations());
-        return lineSection.getDownStations();
+        return lineSections.getDownStations();
     }
 
     public void deleteSectionByStation(Station station) {
-        Section lastSection = lineSection.deleteSectionByStation(station, this.downStation);
+        Section lastSection = lineSections.deleteSectionByStation(station);
         this.downStation = lastSection.getUpStation();
     }
 }

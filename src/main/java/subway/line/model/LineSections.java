@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 @Embeddable
 @NoArgsConstructor
-public class LineSection {
+public class LineSections {
 
     private static final long MINIMAL_SECTION_SIZE = 2L;
 
@@ -23,7 +23,7 @@ public class LineSection {
     private final List<Section> sections = new ArrayList<>();
 
     public void add(Section section, Line line) {
-        if (line.getLineSection().sections.size() > 1) {
+        if (line.getLineSections().sections.size() > 1) {
             validUpStationInNewSectionIsDownStationInExistLine(section, line);
             validDownStationInNewSectionIsNotDuplicatedInExistLine(section, line);
         }
@@ -39,12 +39,13 @@ public class LineSection {
         return this.sections.size();
     }
 
-    public Section deleteSectionByStation(Station targetStation, Station downStation) {
+    public Section deleteSectionByStation(Station targetStation) {
         vaildStationsCountIsOverMinimalSectionSize();
-        validRemoveStationIsDownStationInExistLine(targetStation, downStation);
-        final int lastElementIndex = this.getStationsCount() - 1;
-        Section lastSection = this.get(lastElementIndex);
+        validRemoveStationIsDownStationInExistLine(targetStation);
+
+        Section lastSection = getLastSection();
         this.remove(lastSection);
+
         return lastSection;
     }
 
@@ -86,5 +87,19 @@ public class LineSection {
             throw new SubwayBadRequestException(LineMessage.SECTION_DELETE_LAST_STATION_VALID_MESSAGE.getCode(),
                     LineMessage.SECTION_DELETE_LAST_STATION_VALID_MESSAGE.getMessage());
         }
+    }
+
+    private void validRemoveStationIsDownStationInExistLine(Station targetStation) {
+        Section lastSection = getLastSection();
+        Station downStation = lastSection.getDownStation();
+        if (!downStation.equals(targetStation)) {
+            throw new SubwayBadRequestException(LineMessage.SECTION_DELETE_LAST_STATION_VALID_MESSAGE.getCode(),
+                    LineMessage.SECTION_DELETE_LAST_STATION_VALID_MESSAGE.getMessage());
+        }
+    }
+
+    private Section getLastSection() {
+        int lastSectionIndex = this.sections.size() - 1;
+        return this.sections.get(lastSectionIndex);
     }
 }
